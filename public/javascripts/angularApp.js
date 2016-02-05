@@ -43,10 +43,9 @@ app.controller('PostsCtrl', ['$scope', 'posts', 'post', function($scope, posts, 
 		});
 		*/
 		
-		posts.addComment({
+		posts.addComment(post._id,{
 			body: $scope.body,
 			author: 'user',
-			upvotes: 0
 		})
 		
 		

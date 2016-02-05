@@ -47,7 +47,17 @@ router.param('post', function(req, res, next, id){
 	});
 });
 
-//
+router.param('comment', function(req, res, next, value){
+	var query = Comment.findById(comment);
+	
+	query.exec(function(err, comment){
+		if(err){return next(err);}
+		if(!comment){return next(new Error('cant\'t find post'));}
+		
+		req.comment = comment;
+		return next();
+	});
+});
 
 //Returns a single post
 router.get('/posts/:post', function(req, res, next){
@@ -84,19 +94,7 @@ router.post('/posts/:post/comments', function(req, res, next){
 	});
 });
 
-router.param(['post', 'comment'], function(req, res, next, value){
-	var query = Comment.findById(value.comment);
-	
-	query.exec(function(err, value.comment){
-		if(err){return next(err);}
-		if(!comment){return next(new Error('cant\'t find post'));}
-		
-		req.comment = value.comment;
-		return next();
-	});
-});
-
-// PUT/posts/:post/comments/:comment/upvote runs through router.param :post, :comment 
+// PUT/posts/:post/comments/:comment/upvote runs through both router.param functions :post, :comment 
 router.put('/posts/:post/comments/:comment/upvote', function(req, res, next){
 	req.comment.upvote(function(err, post){
 		if(err){return next(err);}
@@ -104,14 +102,3 @@ router.put('/posts/:post/comments/:comment/upvote', function(req, res, next){
 		res.json(comment);
 	});
 });
-
-
-
-
-
-
-
-
-
-
-
